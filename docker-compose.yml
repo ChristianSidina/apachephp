@@ -1,0 +1,36 @@
+version: '3'
+services:
+    web:
+        build: 
+            context: .
+            dockerfile: Dockerfile
+        ports:
+            - "8005:80"
+        depends_on:
+            - db
+        networks:
+            default:
+    db:
+        image: mysql:latest
+        environment:
+            MYSQL_HOST: localhost
+            MYSQL_ROOT_PASSWORD: mysqlrootpass
+            MYSQL_DATABASE: mysqldb
+            MYSQL_USER: appuser
+            MYSQL_PASSWORD: appuserpwd
+        networks:
+            default:
+    phpmyadmin:
+        image: phpmyadmin/phpmyadmin
+        links:
+            - db
+        environment:
+            PMA_HOST: db
+            PMA_PORT: 3306
+        ports:
+            - "8006:80"
+networks:
+    default:
+        driver: bridge
+
+    
